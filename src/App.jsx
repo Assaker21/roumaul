@@ -3,9 +3,13 @@ import "./App.css";
 import { useEffect } from "react";
 
 function App() {
-  const [ws, setWs] = useState(new WebSocket("ws://localhost:8080"));
+  const [ws, setWs] = useState(null);
+  const [url, setUrl] = useState("ws://localhost:8080");
 
-  useEffect(() => {
+  function connect() {
+    const _ws = new WebSocket(url);
+    setWs(_ws);
+
     const setupCall = {
       sender: "phone 1",
       action: "setup",
@@ -13,14 +17,14 @@ function App() {
       data: "",
     };
 
-    ws.onopen = (event) => {
-      ws.send(JSON.stringify(setupCall));
+    _ws.onopen = (event) => {
+      _ws.send(JSON.stringify(setupCall));
     };
 
-    ws.onmessage = (event) => {
+    _ws.onmessage = (event) => {
       console.log(event.data);
     };
-  }, []);
+  }
 
   function sendMessage(value) {
     const message = {
@@ -36,6 +40,19 @@ function App() {
   return (
     <>
       <div className="container">
+        <input
+          value={url}
+          onChange={(e) => {
+            setUrl(e.value);
+          }}
+        />
+        <button
+          onClick={() => {
+            connect();
+          }}
+        >
+          Connect
+        </button>
         <button
           onClick={() => {
             sendMessage("left");
