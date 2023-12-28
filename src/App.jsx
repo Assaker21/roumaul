@@ -4,10 +4,10 @@ import { useEffect } from "react";
 
 function App() {
   const [ws, setWs] = useState(null);
-  const [url, setUrl] = useState("ws://localhost:8080");
+  const [url, setUrl] = useState("wss://roumaul-server.onrender.com");
 
   function connect() {
-    const _ws = new WebSocket(url);
+    const _ws = new WebSocket(url, "echo-protocol");
     setWs(_ws);
 
     const setupCall = {
@@ -41,9 +41,10 @@ function App() {
     <>
       <div className="container">
         <input
-          value={url}
+          defaultValue={url}
           onChange={(e) => {
-            setUrl(e.value);
+            console.log(e.target.value);
+            setUrl(e.target.value);
           }}
         />
         <button
