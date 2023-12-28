@@ -4,15 +4,22 @@ app.use(express.json());*/
 
 //const WebSocket = require("ws");
 
-var server = require("http").createServer();
+var express = require("express");
+var app = express();
+
+var server = require("http").createServer(app);
 var WebSocketServer = require("ws").Server;
 
-const wss = new WebSocketServer({ server: server }, () => {});
+const wss = new WebSocketServer({ server: server }, () => {
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log("App listening at http://%s:%s", host, port);
+});
 
-server.listen(8080);
+server.listen(80);
 
 wss.on("listening", () => {
-  console.log("Server is listening on port 8080");
+  console.log("Server is listening on port 80");
 });
 
 var all = new Object();
