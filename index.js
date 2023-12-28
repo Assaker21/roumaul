@@ -3,9 +3,13 @@ const app = express();
 app.use(express.json());
 
 const WebSocket = require("ws");
-const wss = new WebSocket.Server({ port: 8080 }, () => {
-  console.log("Socket server started");
-});
+
+var server = require("http").createServer();
+var WebSocketServer = require("ws").Server;
+
+const wss = new WebSocketServer({ server: server }, () => {});
+
+server.listen(8080);
 
 wss.on("listening", () => {
   console.log("Server is listening on port 8080");
