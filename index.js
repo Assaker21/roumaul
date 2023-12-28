@@ -1,8 +1,8 @@
-const express = require("express");
+/*const express = require("express");
 const app = express();
-app.use(express.json());
+app.use(express.json());*/
 
-const WebSocket = require("ws");
+//const WebSocket = require("ws");
 
 var server = require("http").createServer();
 var WebSocketServer = require("ws").Server;
@@ -44,12 +44,12 @@ wss.on("connection", (ws) => {
 });
 
 function handleMessage(data) {
-  if (data.team == "player") {
+  if (data.team == "player" && all["host"]) {
     all["host"].ws.send(data.data.direction);
   }
 }
 
-const port = 3000;
+/*const port = 3000;
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
@@ -71,4 +71,4 @@ app.post("/", (req, res) => {
     status: "success",
     data: req.body,
   });
-});
+});*/
