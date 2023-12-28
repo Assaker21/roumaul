@@ -16,7 +16,7 @@ const wss = new WebSocketServer({ server: server }, () => {
   console.log("App listening at http://%s:%s", host, port);
 });
 
-server.listen(80);
+server.listen(443);
 
 wss.on("listening", () => {
   console.log("Server is listening on port 80");
