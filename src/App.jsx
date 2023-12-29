@@ -3,11 +3,11 @@ import { v4 as uuidv4 } from "uuid";
 import "./App.css";
 
 const devUrl = "ws://localhost:443";
-const url = "wss://roumaul-server.onrender.com";
+const prodUrl = "wss://roumaul-server.onrender.com";
 
 function App() {
   const [ws, setWs] = useState(null);
-  const [url, setUrl] = useState(devUrl);
+  const [url, setUrl] = useState(prodUrl);
   const [code, setCode] = useState("");
   const [id, setId] = useState(uuidv4());
 
