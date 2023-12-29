@@ -19,40 +19,54 @@ const wss = new WebSocketServer({ server: server }, () => {
 server.listen(443);
 
 wss.on("listening", () => {
-  console.log("Server is listening on port 80");
+  console.log("Server is listening on port 443");
 });
 
 var all = new Object();
 
 wss.on("connection", (ws) => {
-  ws.send("connected!");
-
   ws.on("message", (data) => {
     data = JSON.parse(data);
-    if (data.action == "setup") {
-      console.log("setup complete for: " + data.sender);
-      all[data.sender] = {
-        sender: data.sender,
-        team: data.team,
-        ws: ws,
-      };
-      ws.send("setup complete for: " + data.sender);
-    } else if (data.action == "message") {
-      console.log(
-        "message received for: " +
-          data.sender +
-          " - message: " +
-          data.data.direction
-      );
-
-      handleMessage(data);
-    }
+    handleMessage(data, ws);
   });
 });
 
-function handleMessage(data) {
-  if (data.team == "player" && all["host"]) {
-    all["host"].ws.send(data.data.direction);
+function handleMessage(_data, ws) {
+  const { code, sender, role, action, data } = _data;
+
+  if (action == "setup") {
+    if (role == "host") {
+      all[code] = {};
+      all[code]["host"] = {
+        ws: ws,
+      };
+
+      console.log("Host setup");
+    } else {
+      all[code][sender] = {
+        ws: ws,
+      };
+
+      all[code]["host"].ws.send(
+        JSON.stringify({
+          sender: "server",
+          action: "setup-player",
+          data: sender,
+        })
+      );
+
+      console.log("Player setup");
+    }
+  } else if (action == "move") {
+    all[code]["host"].ws.send(
+      JSON.stringify({
+        sender: sender,
+        action: "move",
+        data: data,
+      })
+    );
+
+    console.log("Move action");
   }
 }
 
