@@ -75,6 +75,7 @@ function handleMessage(_data, ws) {
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
+*/
 
 var counter = 0;
 app.get("/", (req, res) => {
@@ -92,4 +93,4 @@ app.post("/", (req, res) => {
     status: "success",
     data: req.body,
   });
-});*/
+});
